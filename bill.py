@@ -1,6 +1,5 @@
 from tkinter import*
-from tkinter import font
-from typing import Counter
+
 
 class Bill_App:
     def __init__(self,root):
