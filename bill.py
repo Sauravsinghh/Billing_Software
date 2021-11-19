@@ -1,4 +1,6 @@
 from tkinter import*
+import math
+import random
 
 class Bill_App:
     def __init__(self,root):
@@ -14,9 +16,12 @@ class Bill_App:
         self.c_name=StringVar()
         self.c_number=StringVar()
         self.bill_number=StringVar()
+        self.b_no=random.randint(100000,999999)
+        self.bill_number.set(str(self.b_no))
+        self.search_bill=StringVar()
         
         
-        #---- cosmatic  ---------
+        #---- cosmetic  ---------
         self.bath_soap=IntVar()
         self.face_cream=IntVar()
         self.face_wash=IntVar()
@@ -53,8 +58,8 @@ class Bill_App:
                    
         
         
-        #---------------------------------------- Customer Detail ------------------------------------------------------------------------
-        
+        #========================================== Customer Detail ====================================================
+               
         f1=LabelFrame(self.root,text="Customer Detail",font=("times new roman",15,"bold"),fg="gold",bg="#07266C")
         f1.place(x=0,y=80,relwidth=1)
         
@@ -123,6 +128,7 @@ class Bill_App:
         
         
         #==========================================      Snacks Frame     ==============================================================================
+        
         F4=LabelFrame(self.root,bd=10,relief=GROOVE,bg="#07266C",text="Snacks",font=("times new roman",15,"bold"),fg="gold")
         F4.place(x=670,y=180,width=325,height=380)
         
@@ -147,6 +153,7 @@ class Bill_App:
         
         
         #==========================================  Bill Printing Area    ==============================================================================
+        
         F5=Frame(self.root,bd=10,relief=GROOVE)
         F5.place(x=1000,y=180,width=345,height=380)
         bill_label=Label(F5,text="Bill area", font=("arial",18,"bold"),bd=7,relief=GROOVE).pack(fill=X)
@@ -158,7 +165,8 @@ class Bill_App:
         
         
         
-         #==========================================   Snacks Frame    ==============================================================================
+        #==========================================   Snacks Frame    ==============================================================================
+        
         F6=LabelFrame(self.root,bd=10,relief=GROOVE,bg="#07266C",text="Bill Menu",font=("times new roman",15,"bold"),fg="gold")
         F6.place(x=0,y=560,relwidth=1,height=140)
         
@@ -184,22 +192,22 @@ class Bill_App:
         
         #======================================== Button Frame ============================================
         
-        
         btn_f=Frame(F6,bd=7,relief=GROOVE)
         btn_f.place(x=730,width=595,height=105)
         
         total_btn=Button(btn_f,text="Total",command=self.total,bg="cadetblue",fg="white",pady=15,bd=5,width=12,font="arial 12 bold").grid(row=0,column=0,padx=5,pady=5)
 
-        gbill_btn=Button(btn_f,text="Generate Bill",bg="cadetblue",fg="white",pady=15,bd=5,width=12,font="arial 12 bold").grid(row=0,column=1,padx=5,pady=5)
+        gbill_btn=Button(btn_f,text="Generate Bill",command=self.welcome_bill,bg="cadetblue",fg="white",pady=15,bd=5,width=12,font="arial 12 bold").grid(row=0,column=1,padx=5,pady=5)
 
         clear_btn=Button(btn_f,text="Clear bill",bg="cadetblue",fg="white",pady=15,bd=5,width=12,font="arial 12 bold").grid(row=0,column=2,padx=5,pady=5)
         
         exit_btn=Button(btn_f,text="Exit",bg="cadetblue",fg="white",pady=15,bd=5,width=12,font="arial 12 bold").grid(row=0,column=3,padx=5,pady=5)
         
         
+        
     def total(self):
         
-        
+        #--------------- Cosmetic Price----------------
           self.cosmetic_pri=(float(
                                     (self.bath_soap.get()*40)+
                                     (self.face_cream.get()*350)+
@@ -211,7 +219,7 @@ class Bill_App:
                             )
           self.cosmetic_price.set("Rs."+str(self.cosmetic_pri))
         
-          
+        #-------------- Grocery Price ------------------------  
           self.grocery_pri=(float(
                                     (self.food_oil.get()*40)+
                                     (self.rice.get()*350)+
@@ -223,7 +231,7 @@ class Bill_App:
                             )
           self.grocery_price.set("Rs."+str(self.grocery_pri))
         
-          
+        #-------------- Snacks Price -------------------------
           self.snacks_pri=(float(
                                     (self.cold_drink.get()*40)+
                                     (self.pizza.get()*350)+
@@ -234,10 +242,28 @@ class Bill_App:
                                 )
                             )
           self.snacks_price.set("Rs."+str(self.snacks_pri))
-    
+          
+        #------------- Calculating Tax---------------    
           self.cosmetic_tax.set("Rs."+str(self.cosmetic_pri*0.05))
           self.grocery_tax.set("Rs."+str(self.grocery_pri*0.05))
           self.snacks_tax.set("Rs."+str(+self.snacks_pri*0.05))
+          
+          
+        #===============================   Bill Area==========================================================
+    def welcome_bill(self):
+        
+          self.txtarea.delete('1.0',END)
+          self.txtarea.insert(END,"\t      Greed Villa")
+          self.txtarea.insert(END,f"\nBill Number:{self.b_no}")
+          self.txtarea.insert(END,f"\nCustomer Name:{self.c_name.get()}")
+          self.txtarea.insert(END,f"\nCostomer Number:{self.c_number.get()}")
+          self.txtarea.insert(END,"\n======================================")
+          self.txtarea.insert(END,"\n Product\t\tQTY\t\tPrice")
+          self.txtarea.insert(END,"\n======================================")
+          
+          
+    def bill_area(self):
+        pass
           
           
         
