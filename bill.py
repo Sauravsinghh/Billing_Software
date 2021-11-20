@@ -1,13 +1,15 @@
 from tkinter import*
 import math
 import random
+import os
+from tkinter import messagebox
 
 class Bill_App:
     def __init__(self,root):
         self.root=root
         self.root.geometry("1350x700+0+0")
-        self.root.title("Billing software")
-        title=Label(self.root,text="Billing Software",bd=12,relief=GROOVE,bg="#07266C",fg="White",font=("times new roman",30,"bold"),pady=2).pack(fill=X)
+        self.root.title("Greed Villa")
+        title=Label(self.root,text="Greed Villa",bd=12,relief=GROOVE,bg="#07266C",fg="White",font=("times new roman",30,"bold"),pady=2).pack(fill=X)
         
         
         #----------------------------------------  Variable    -------------------------------------------------------------------------------
@@ -72,7 +74,7 @@ class Bill_App:
         c_bill_lbl=Label(f1,text=" Bill Number",bg="#07266C",fg="white",font=("times new roman",18,"bold")).grid(row=0,column=4,padx=30,pady=6)
         c_bill_txt=Entry(f1,width=15,textvariable=self.bill_number,font="arial 15",bd=7,relief=SUNKEN).grid(row=0,column=5,pady=5,padx=10)
         
-        bill_btn=Button(f1,text="search",width=10,bd=7,font="arial 12 bold"). grid(row=0,column=6,padx=10, pady=10)
+        bill_btn=Button(f1,text="search",command=self.find_bill,width=10,bd=7,font="arial 12 bold"). grid(row=0,column=6,padx=10, pady=10)
         
         
         
@@ -106,22 +108,22 @@ class Bill_App:
         F3=LabelFrame(self.root,bd=10,relief=GROOVE,bg="#07266C",text="Grocery",font=("times new roman",15,"bold"),fg="gold")
         F3.place(x=335,y=180,width=325,height=380)
         
-        food_oil_lbl=Label(F3,text="Bath Soap",font=("times new roman",16,"bold"),bg="#07266C",fg="green").grid(row=0,column=0,padx=10,pady=10,sticky="w")
+        food_oil_lbl=Label(F3,text="Food Oil",font=("times new roman",16,"bold"),bg="#07266C",fg="green").grid(row=0,column=0,padx=10,pady=10,sticky="w")
         food_oil_lbl=Entry(F3,width=10,textvariable=self.food_oil,font=("times new roman",16,"bold"),bd=5,relief=SUNKEN).grid(row=0,column=1,pady=10,padx=10)
         
         rice_lbl=Label(F3,text="Rice",font=("times new roman",16,"bold"),bg="#07266C",fg="green").grid(row=1,column=0,padx=10,pady=10,sticky="w")
         rice_lbl=Entry(F3,width=10,textvariable=self.rice,font=("times new roman",16,"bold"),bd=5,relief=SUNKEN).grid(row=1,column=1,pady=10,padx=10)
         
-        sugar_lbl=Label(F3,text="Face Wash",font=("times new roman",16,"bold"),bg="#07266C",fg="green").grid(row=2,column=0,padx=10,pady=10,sticky="w")
+        sugar_lbl=Label(F3,text="Sugar",font=("times new roman",16,"bold"),bg="#07266C",fg="green").grid(row=2,column=0,padx=10,pady=10,sticky="w")
         sugar_lbl=Entry(F3,width=10,textvariable=self.sugar,font=("times new roman",16,"bold"),bd=5,relief=SUNKEN).grid(row=2,column=1,pady=10,padx=10)
         
-        salt_lbl=Label(F3,text="Shampoo",font=("times new roman",16,"bold"),bg="#07266C",fg="green").grid(row=3,column=0,padx=10,pady=10,sticky="w")
+        salt_lbl=Label(F3,text="Salt",font=("times new roman",16,"bold"),bg="#07266C",fg="green").grid(row=3,column=0,padx=10,pady=10,sticky="w")
         salt_lbl=Entry(F3,width=10,textvariable=self.salt,font=("times new roman",16,"bold"),bd=5,relief=SUNKEN).grid(row=3,column=1,pady=10,padx=10)
         
-        flour_lbl=Label(F3,text="Hair Oil",font=("times new roman",16,"bold"),bg="#07266C",fg="green").grid(row=4,column=0,padx=10,pady=10,sticky="w")
+        flour_lbl=Label(F3,text="Flour",font=("times new roman",16,"bold"),bg="#07266C",fg="green").grid(row=4,column=0,padx=10,pady=10,sticky="w")
         flour_lbl=Entry(F3,width=10,textvariable=self.flour,font=("times new roman",16,"bold"),bd=5,relief=SUNKEN).grid(row=4,column=1,pady=10,padx=10)
         
-        spices_lbl=Label(F3,text="Body Lotion",font=("times new roman",16,"bold"),bg="#07266C",fg="green").grid(row=5,column=0,padx=10,pady=10,sticky="w")
+        spices_lbl=Label(F3,text="Spices",font=("times new roman",16,"bold"),bg="#07266C",fg="green").grid(row=5,column=0,padx=10,pady=10,sticky="w")
         spices_lbl=Entry(F3,width=10,textvariable=self.spices,font=("times new roman",16,"bold"),bd=5,relief=SUNKEN).grid(row=5,column=1,pady=10,padx=10)
 
         
@@ -197,59 +199,102 @@ class Bill_App:
         
         total_btn=Button(btn_f,text="Total",command=self.total,bg="cadetblue",fg="white",pady=15,bd=5,width=12,font="arial 12 bold").grid(row=0,column=0,padx=5,pady=5)
 
-        gbill_btn=Button(btn_f,text="Generate Bill",command=self.welcome_bill,bg="cadetblue",fg="white",pady=15,bd=5,width=12,font="arial 12 bold").grid(row=0,column=1,padx=5,pady=5)
+        gbill_btn=Button(btn_f,text="Generate Bill",command=self.bill_area,bg="cadetblue",fg="white",pady=15,bd=5,width=12,font="arial 12 bold").grid(row=0,column=1,padx=5,pady=5)
 
-        clear_btn=Button(btn_f,text="Clear bill",bg="cadetblue",fg="white",pady=15,bd=5,width=12,font="arial 12 bold").grid(row=0,column=2,padx=5,pady=5)
+        clear_btn=Button(btn_f,text="Clear bill",command=self.clear_data,bg="cadetblue",fg="white",pady=15,bd=5,width=12,font="arial 12 bold").grid(row=0,column=2,padx=5,pady=5)
         
-        exit_btn=Button(btn_f,text="Exit",bg="cadetblue",fg="white",pady=15,bd=5,width=12,font="arial 12 bold").grid(row=0,column=3,padx=5,pady=5)
+        exit_btn=Button(btn_f,text="Exit",command=self.Exit_app,bg="cadetblue",fg="white",pady=15,bd=5,width=12,font="arial 12 bold").grid(row=0,column=3,padx=5,pady=5)
         
+        
+        self.welcome_bill()
         
         
     def total(self):
         
         #--------------- Cosmetic Price----------------
+          self.c_bath_soap=self.bath_soap.get()*40
+          self.c_face_cream=self.face_cream.get()*40
+          self.c_face_wash=self.face_wash.get()*40
+          self.c_shampoo=self.shampoo.get()*40
+          self.c_hair_oil=self.hair_oil.get()*40
+          self.c_body_lotion=self.body_lotion.get()*40
+          
+          
           self.cosmetic_pri=(float(
-                                    (self.bath_soap.get()*40)+
-                                    (self.face_cream.get()*350)+
-                                    (self.face_wash.get()*300)+
-                                    (self.shampoo.get()*460)+
-                                    (self.hair_oil.get()*290)+
-                                    (self.body_lotion.get()*195)
+                                    (self.c_bath_soap)+
+                                    (self.c_face_cream)+
+                                    (self.c_face_wash)+
+                                    (self.c_shampoo)+
+                                    (self.c_hair_oil)+
+                                    (self.c_body_lotion)
                                 )
                             )
           self.cosmetic_price.set("Rs."+str(self.cosmetic_pri))
         
         #-------------- Grocery Price ------------------------  
+        
+          self.c_food_oil=self.food_oil.get()*40
+          self.c_rice=self.rice.get()*40
+          self.c_sugar=self.sugar.get()*40
+          self.c_salt=self.salt.get()*40
+          self.c_flour=self.flour.get()*40
+          self.c_spices=self.spices.get()*40
+          
+          
           self.grocery_pri=(float(
-                                    (self.food_oil.get()*40)+
-                                    (self.rice.get()*350)+
-                                    (self.sugar.get()*300)+
-                                    (self.salt.get()*460)+
-                                    (self.flour.get()*290)+
-                                    (self.spices.get()*195)
+                                    (self.c_food_oil)+
+                                    (self.c_rice)+
+                                    (self.c_sugar)+
+                                    (self.c_salt)+
+                                    (self.c_flour)+
+                                    (self.c_spices)
                                 )
                             )
           self.grocery_price.set("Rs."+str(self.grocery_pri))
         
         #-------------- Snacks Price -------------------------
+          self.c_cold_drink=self.cold_drink.get()*40
+          self.c_pizza=self.pizza.get()*40
+          self.c_burger=self.burger.get()*40
+          self.c_sweet=self.sweet.get()*40
+          self.c_boos=self.boos.get()*40
+          self.c_samosa=self.samosa.get()*40
+          
+          
           self.snacks_pri=(float(
-                                    (self.cold_drink.get()*40)+
-                                    (self.pizza.get()*350)+
-                                    (self.burger.get()*300)+
-                                    (self.sweet.get()*460)+
-                                    (self.boos.get()*290)+
-                                    (self.samosa.get()*195)
+                                    (self.c_cold_drink)+
+                                    (self.c_pizza)+
+                                    (self.c_burger)+
+                                    (self.c_sweet)+
+                                    (self.c_boos)+
+                                    (self.c_samosa)
                                 )
                             )
           self.snacks_price.set("Rs."+str(self.snacks_pri))
           
         #------------- Calculating Tax---------------    
-          self.cosmetic_tax.set("Rs."+str(self.cosmetic_pri*0.05))
-          self.grocery_tax.set("Rs."+str(self.grocery_pri*0.05))
-          self.snacks_tax.set("Rs."+str(+self.snacks_pri*0.05))
+          self.c_tax=self.cosmetic_pri*0.05
+          self.cosmetic_tax.set("Rs."+str(self.c_tax))
+          self.c_grocery=self.grocery_pri*0.05
+          self.grocery_tax.set("Rs."+str(self.c_grocery))
+          self.c_snacks=self.snacks_pri*0.05
+          self.snacks_tax.set("Rs."+str(self.c_snacks))
+          
+          
+          
+          self.total_price=float(
+                                 self.cosmetic_pri+
+                                 self.grocery_pri+
+                                 self.snacks_pri+
+                                 self.c_tax+
+                                 self.c_grocery+
+                                 self.c_snacks
+                                )
+          
           
           
         #===============================   Bill Area==========================================================
+    
     def welcome_bill(self):
         
           self.txtarea.delete('1.0',END)
@@ -263,10 +308,181 @@ class Bill_App:
           
           
     def bill_area(self):
-        pass
-          
-          
+        # if self.c_name.get()=="" or self.c_phon.get()=="":
+        #     messagebox.showerror("Error","customer details are must")
+            
+        # elif self.cosmetic_price.get()=="Rs. 0.0" and self.grocery_price.get()=="Rs. 0.0" and self.snacks_price.get()=="Rs. 0.0":
+        #     messagebox.showerror("Error","No product purchased")
+            
+        # else:
+            self.welcome_bill()
+        #-------cosmetics=======
+    
+            if self.bath_soap.get()!=0:
+                self.txtarea.insert(END,f"\n Bath Soap\t\t{self.bath_soap.get()}\t\t{self.c_bath_soap}")
+
+            if self.face_cream.get()!=0:
+                self.txtarea.insert(END,f"\n face cream\t\t{self.face_cream.get()}\t\t{self.c_face_cream}")
+
+            if self.face_wash.get()!=0:
+                self.txtarea.insert(END,f"\n face wash\t\t{self.face_wash.get()}\t\t{self.c_face_wash}")
+
+            if self.shampoo.get()!=0:
+                self.txtarea.insert(END,f"\n shampoo\t\t{self.shampoo.get()}\t\t{self.c_shampoo}")
+
+            if self.hair_oil.get()!=0:
+                self.txtarea.insert(END,f"\n hair oil\t\t{self.hair_oil.get()}\t\t{self.c_hair_oil}")
+
+            if self.body_lotion.get()!=0:
+                self.txtarea.insert(END,f"\n body lotion\t\t{self.body_lotion.get()}\t\t{self.c_body_lotion}")
+
+
+            #=======Grocery============
+            if self.rice.get()!=0:
+                self.txtarea.insert(END,f"\n rice\t\t{self.rice.get()}\t\t{self.c_rice}")
+
+            if self.food_oil.get()!=0:
+                self.txtarea.insert(END,f"\n food oil\t\t{self.food_oil.get()}\t\t{self.c_food_oil}")
+
+            if self.sugar.get()!=0:
+                self.txtarea.insert(END,f"\n sugar\t\t{self.sugar.get()}\t\t{self.c_sugar}")
+
+            if self.salt.get()!=0:
+                self.txtarea.insert(END,f"\n salt\t\t{self.salt.get()}\t\t{self.c_salt}")
+                
+            if self.flour.get()!=0:
+                self.txtarea.insert(END,f"\n flour\t\t{self.flour.get()}\t\t{self.c_flour}")
+                
+            if self.spices.get()!=0:
+                self.txtarea.insert(END,f"\n spices\t\t{self.spices.get()}\t\t{self.c_spices}")
+
+
+            #===============snacks price====================
+            if self.cold_drink.get()!=0:
+                self.txtarea.insert(END,f"\n cold drink\t\t{self.cold_drink.get()}\t\t{self.c_cold_drink}")
+                
+            if self.pizza.get()!=0:
+                self.txtarea.insert(END,f"\n pizza\t\t{self.pizza.get()}\t\t{self.c_pizza}")
+
+            if self.burger.get()!=0:
+                self.txtarea.insert(END,f"\n burger\t\t{self.burger.get()}\t\t{self.c_burger}")
+
+            if self.sweet.get()!=0:
+                self.txtarea.insert(END,f"\n sweet\t\t{self.sweet.get()}\t\t{self.c_sweet}")
+
+            if self.boos.get()!=0:
+                self.txtarea.insert(END,f"\n boo\t\t{self.boos.get()}\t\t{self.c_boos}")
+
+            if self.samosa.get()!=0:
+                self.txtarea.insert(END,f"\n samosa\t\t{self.samosa.get()}\t\t{self.c_samosa}")   
+            
+            self.txtarea.insert(END,f"\n--------------------------------------")
+            if self.cosmetic_tax.get!="0.0":
+                self.txtarea.insert(END,f"\nCosmetic Tax\t\t\t      {self.cosmetic_tax.get()}")
+            
+            if self.grocery_tax.get!="0.0":
+                self.txtarea.insert(END,f"\nGrocery Tax\t\t\t      {self.grocery_tax.get()}")
+            
+            if self.snacks_tax.get!="0.0":
+                self.txtarea.insert(END,f"\nSnacks Tax\t\t\t      {self.snacks_tax.get()}")
+            
+            self.txtarea.insert(END,f"\n--------------------------------------")   
+            self.txtarea.insert(END,f"\nTotal Price\t\t\t      Rs.{self.total_price}")
+            self.txtarea.insert(END,f"\n--------------------------------------")
+            
+            
+            
+            # if self.cosmetic_tax.get()!="RS. 0.0":
+            #     self.txtarea.insert(END,f"\n Cosmetics Tax\t\t\t{self.cosmetic_tax.get()}")
+            
+            
+            # if self.grocery_tax.get()!="RS. 0.0":
+            #     self.txtarea.insert(END,f"\n grocery Tax\t\t\t{self.grocery_tax.get()}")
+
+            # if self.snacks_price_tax.get()!="RS. 0.0":
+            #     self.txtarea.insert(END,f"\n snacks price Tax\t\t\t{self.snacks_price_tax.get()}")
+            #     self.txtarea.insert(END,f"\n Total bill\t\t\t  Rs.  {self.Total_bill}")
+
+            #     self.txtarea.insert(END,f"\n--------------------------------")     
+
+            self.save_bill()
         
+    def save_bill(self):
+          op=messagebox.askyesno("save Bill","Do you want to save the Bill?")
+          if op>0:
+              self.bill_data=self.txtarea.get('1.0',END)
+              f1=open("bills/"+str(self.bill_number.get())+".txt","w")
+              f1.write(self.bill_data)
+              f1.close()
+              messagebox.showinfo("saved",f"Bill no. :{self.bill_number.get()}saved Successfully")
+          else:
+              return
+          
+    def find_bill(self):
+          present="no"
+          for i in os.listdir("bills/"):
+                if i.split('.')[0]==self.search_bill.get():
+                    f1=open(f"bills/{i}","r")
+                    self.txtarea.delete('1.0',END)
+                    for d in f1:
+                            self.txtarea.insert(END,d)
+                    f1.close()
+                    present="yes"
+          if present=="no":
+                messagebox.showerror("Error","Invalid Bill No.")
+        
+    def clear_data(self):
+                op=messagebox.askyesno("Exit","Do you really want tot clear?")
+                if op>0:
+                    #---- cosmetic  ---------
+                    self.bath_soap=set(0)
+                    self.face_cream=set(0) 
+                    self.face_wash=set(0)
+                    self.shampoo=set(0)
+                    self.hair_oil=set(0)
+                    self.body_lotion=set(0)
+                    
+                    #----- Grocery -----------
+                    self.food_oil=set(0)
+                    self.rice=set(0)
+                    self.sugar=set(0)
+                    self.salt=set(0)
+                    self.flour=set(0)
+                    self.spices=set(0)
+                    
+                    #------- snacks ----------
+                    self.cold_drink=set(0)
+                    self.pizza=set(0)
+                    self.burger=set(0)
+                    self.sweet=set(0)
+                    self.boos=set(0)
+                    self.samosa=set(0)
+                    
+                    
+                    #---- Total and Tax Price-----
+                    self.cosmetic_price.set("")
+                    self.grocery_price.set("")
+                    self.snacks_price.set("")
+                    
+                    self.cosmetic_tax.set("")
+                    self.grocery_tax.set("")
+                    self.snacks_tax.set("")
+                    
+                    #===============Customer============
+                    self.bill_no.set("")
+                    X=random.randiant(1000,9999)
+                    self.bill_no.set(str(X))
+
+                    self.search_bill.set("")
+                    self.welcome_bill()
+
+    def Exit_app(self):
+        op=messagebox.askyesno("Exit","Do you really want tot exit?")
+        if op>0:
+            self.root.destroy()                      
+    
+        
+                                
 
 root=Tk() 
 obj = Bill_App(root)
